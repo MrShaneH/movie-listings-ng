@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import {map, tap} from "rxjs/operators";
+import { map, tap } from 'rxjs/operators';
 import { State } from './state';
-import {TheMovieDbService} from "../services/themoviedb.service";
+import { TheMovieDbService } from '../services/themoviedb.service';
 
 @Injectable()
 export class StateService {
@@ -37,7 +37,7 @@ export class StateService {
               .filter((el, i, a) => i === a.indexOf(el)) // and remove duplicates
               .map( (usedGenre) => data.genres.filter(genre => genre.id === usedGenre) ) // filter genres by only those in use
               .reduce((a, b) => [...a, ...b], []) // flatten into one array that matches Genre[]
-          }
+          };
         }),
         map(() => {
           // Requirement: Display a list of movies, each showing their genres
@@ -50,17 +50,7 @@ export class StateService {
                   (genre_id) =>  movie.genres.push(state.genres.find((genre) => genre.id === genre_id)));
                 return movie;
               })
-          }
-        }),
-        map( () => {
-          // Requirement: All genres are selected by default
-          state = {
-            ...state,
-            filters: {
-              rating: state.filters.rating,
-              genres: state.genres.map( (genre) => {return { id: genre.id, value: true }}  )
-            }
-          }
+          };
         }),
         tap(() => {
           this._stateSubject.next(state);
@@ -74,10 +64,24 @@ export class StateService {
         ...state,
         filters: {
           rating: state.filters.rating,
-          genres: state.filters.genres.map( (genre) => genre.id === id ? {id, value} : genre)
+          // value is the checkbox value, true = add id to filter list, false = remove from filter list
+          genres: value ? [...state.filters.genres, id] : state.filters.genres.filter( genreId => genreId !== id)
         }
       };
       this._stateSubject.next(state);
+  }
+
+  public filterRating(value: number): void {
+    let state: State = this._stateSubject.value;
+    state = {
+      ...state,
+      filters: {
+        // value is the slider value
+        rating: value,
+        genres: state.filters.genres
+      }
+    };
+    this._stateSubject.next(state);
   }
 
   public getState() {

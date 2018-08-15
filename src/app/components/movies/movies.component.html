@@ -2,7 +2,7 @@
   <h2>Now Showing {{ movies.length }} Movies</h2>
   <ul class="movies">
     <li class="panel" *ngFor="let movie of movies">
-      <span>{{movie.title}}</span>
+      <span>{{movie.title}} ({{movie.vote_average}}/10)</span>
       <img [src]="getImageUrl(movie.poster_path)" [alt]="movie.title">
       <ul>
         <li *ngFor="let genre of movie.genres">

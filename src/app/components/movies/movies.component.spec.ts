@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MoviesComponent } from './movies.component';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {StateService} from '../../+state';
+import {InitializerService} from '../../app.initializer';
 
 describe('MoviesComponent', () => {
   let component: MoviesComponent;
@@ -8,7 +12,11 @@ describe('MoviesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MoviesComponent ]
+      declarations: [ MoviesComponent ],
+      providers: [
+        {provide: StateService, useClass: MockStateService},
+        {provide: InitializerService, useClass: MockInitializerService},
+      ]
     })
     .compileComponents();
   }));
@@ -23,3 +31,13 @@ describe('MoviesComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+@Injectable()
+export class MockStateService {
+  public getState() {
+    return Observable.create();
+  }
+}
+
+@Injectable()
+export class MockInitializerService {}

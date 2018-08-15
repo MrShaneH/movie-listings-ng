@@ -1,10 +1,10 @@
-import {Movie, Genre} from "../models";
+import { Movie, Genre } from '../models/index';
 
 export interface State {
   movies: Movie[];
   genres: Genre[];
   filters: {
-    genres: Array<{id: number, value: boolean}>,
+    genres: number[],
     rating: number,
-  }
+  };
 }

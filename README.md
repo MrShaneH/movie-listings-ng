@@ -1,27 +1,24 @@
-# MovieListingsNg
+# Welcome to NotFlix
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.2.
 
-## Development server
+### Installation
+Run `npm install -g @angular/cli` locally to install the Angular CLI
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Clone this repo, then run `ng serve` from the project directory for a dev server.
 
-## Code scaffolding
+Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Running application
+The app uses [RXJS](https://angular.io/guide/rx-library) to implement a basic Store for managing the app state. 
 
-## Build
+State is available as an Observable that can be subscribed to, when the state changes, either from data loading from API or from user input, `movies.component.ts` will receive the new state.    
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
+* On app init, the `app.component.ts > ngOnInit` method will request the store to load.
+* The store will call the `themoviedb.service.ts > getCombined()` method which calls out to the 'TMDb Movies Now Playing' and 'TMDb Movie genres' API endpoints for data
+* The responses are parsed and saved in the state service. Subscribers are notified that the state has been updated. 
+* The user can interact with the filter component to send actions (`onRatingChange`, `onGenreChange`) to the store to alter the values in the state
+ 
+### Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

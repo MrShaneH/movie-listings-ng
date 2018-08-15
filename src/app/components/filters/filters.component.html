@@ -1,10 +1,26 @@
-<div class="genres" *ngIf="genres$ | async as genres">
+<div class="genreFilter" *ngIf="genres$ | async as genres">
   <span>Filter by Genre</span>
-  <form #genreForm="ngForm">
+  <form>
     <label *ngFor="let genre of genres">
-      <input type="checkbox" checked="checked" value="{{genre.id}}" (change)="onGenreChange($event)" />
+      <input type="checkbox"
+             [value]="genre.id"
+             (change)="onGenreChange($event)" />
       {{ genre.name }}
     </label>
   </form>
 </div>
+<div class="ratingFilter" *ngIf="rating$ | async as rating">
+  <span>Filter by Rating</span>
+  <mat-slider
+    class="slider"
+    [value]="rating"
+    [max]="ratingConfig.max"
+    [min]="ratingConfig.min"
+    [step]="ratingConfig.step"
+    [tickInterval]="ratingConfig.tickInterval"
+    [thumbLabel]="ratingConfig.thumbLabel"
+    (change)="onRatingChange($event)">
+  </mat-slider>
+</div>
+
 

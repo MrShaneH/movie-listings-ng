@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {map} from "rxjs/operators";
-import {Observable} from "rxjs";
-import {Movie} from "../../../models";
-import {StateService} from "../../../+state";
-import {InitializerService} from "../../app.initializer";
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {Movie} from '../../models';
+import {StateService} from '../../+state';
+import {InitializerService} from '../../app.initializer';
 
 @Component({
   selector: 'app-movies',
@@ -19,21 +19,22 @@ export class MoviesComponent implements OnInit {
     this.movies$ = this._stateService
       .getState()
       .pipe(
-        map((state) => {
+        map(state => {
           return state.movies
-            .filter((movie) => {
-              return movie.genre_ids.some((id) => {
-                return !!state.filters.genres.find(genre => genre.id === id && genre.value === true);
-              });
-            })
-            .filter((movie) => movie.vote_average >= state.filters.rating)
-            .sort((a, b) => b.popularity - a.popularity)
+            // Requirement: The user should have the ability to toggle movies depending on all of its assigned genres
+            .filter(movie => state.filters.genres.every((checked_genre) => movie.genre_ids.includes(checked_genre)))
+
+            // Requirement: Movies should also be filterable by their rating (vote_average property)
+            .filter(movie => movie.vote_average >= state.filters.rating)
+
+            // The movies should be ordered by popularity (most popular first - popularity property)
+            .sort((a, b) => b.popularity - a.popularity);
         })
       );
   }
 
   getImageUrl(path: string) {
-    return this._initService.config.base_url + this._initService.config.poster_sizes[1] + path
+    return this._initService.config.base_url + this._initService.config.poster_sizes[1] + path;
   }
 
 }
