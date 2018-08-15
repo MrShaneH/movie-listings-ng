@@ -1,0 +1,10 @@
+<div class="genres" *ngIf="genres$ | async as genres">
+  <span>Filter by Genre</span>
+  <form #genreForm="ngForm">
+    <label *ngFor="let genre of genres">
+      <input type="checkbox" checked="checked" value="{{genre.id}}" (change)="onGenreChange($event)" />
+      {{ genre.name }}
+    </label>
+  </form>
+</div>
+
